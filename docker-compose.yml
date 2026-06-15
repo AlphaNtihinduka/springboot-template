@@ -1,0 +1,80 @@
+services:
+  app:
+    build: .
+    env_file:
+      - .env
+  mongodb:
+    image: mongo:7.0
+    healthcheck:
+      test: echo 'db.runCommand({ ping: 1 })' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
+    #(recommended)
+    #
+    #Only expose MongoDB internally:
+    #
+    #ports: []
+    ports: []
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - bilimy-network
+
+  springboot-template:
+    build: .
+    image: springboot-template:latest
+    #⚠️ 4. restart: always is OK, but consider unless-stopped
+    #
+    #Better:
+    #
+    #restart: unless-stopped
+    #Why?
+    #always restarts even after manual stop
+    #unless-stopped is safer for VPS management
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongodb:27017/${MONGO_DATABASE}?authSource=admin
+      SPRING_DATA_MONGODB_DATABASE: ${MONGO_INITDB_DATABASE:-platform_template}
+    # ⚠️ 5. Missing dependency safety for MongoDB startup
+    #depends_on:
+    #  - mongodb
+    #❌ Problem
+    #
+    #This does NOT guarantee MongoDB is ready — only started.
+    #
+    #Spring may start too early → connection failure.
+    #
+    #✅ Fix: add healthcheck
+    #mongodb:
+    #  image: mongo:7.0
+    #  healthcheck:
+    #    test: echo 'db.runCommand({ ping: 1 })' | mongosh localhost:27017/test --quiet
+    #    interval: 10s
+    #    timeout: 5s
+    #    retries: 5
+    #
+    #Then:
+    #
+    #depends_on:
+    #  mongodb:
+    #    condition: service_healthy
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - bilimy-network
+
+networks:
+  bilimy-network:
+    name: bilimy-network
+
+volumes:
+  mongo_data:

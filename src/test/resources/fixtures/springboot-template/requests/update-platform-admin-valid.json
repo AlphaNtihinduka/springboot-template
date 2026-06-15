@@ -1,0 +1,11 @@
+{
+  "username": "tenant.ops",
+  "email": "tenant.ops@bilimy.com",
+  "fullName": "Tenant Operations",
+  "role": "SUPPORT_ADMIN",
+  "status": "DISABLED",
+  "permissions": [
+    "TENANTS_READ",
+    "TENANTS_WRITE"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "status": 400,
+  "error": "Bad Request",
+  "message": "username: must not be blank",
+  "path": "/api/v1/platform-admins"
+}

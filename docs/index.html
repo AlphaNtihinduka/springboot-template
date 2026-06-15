@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Boot Template Docs</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<main class="page">
+    <section class="hero">
+        <p class="eyebrow">Bilimy Platform Template</p>
+        <h1>Platform Admin API</h1>
+        <p class="intro">
+            This example microservice ships with a seeded super admin and a REST surface you can use as the baseline
+            for new platform-level services.
+        </p>
+    </section>
+
+    <section class="panel">
+        <h2>Seeded Super Admin</h2>
+        <pre>{
+  "username": "superadmin",
+  "email": "superadmin@bilimy.com",
+  "role": "SUPER_ADMIN"
+}</pre>
+    </section>
+
+    <section class="panel">
+        <h2>Example Request</h2>
+        <pre id="request-sample"></pre>
+        <button id="copy-request" type="button">Copy JSON</button>
+    </section>
+
+    <section class="panel">
+        <h2>Example Endpoints</h2>
+        <ul>
+            <li><code>GET /api/v1/platform-admins</code></li>
+            <li><code>POST /api/v1/platform-admins</code></li>
+            <li><code>GET /api/v1/platform-admins/{id}</code></li>
+            <li><code>PUT /api/v1/platform-admins/{id}</code></li>
+            <li><code>DELETE /api/v1/platform-admins/{id}</code></li>
+            <li><code>GET /api/v1/platform-admins/username/{username}</code></li>
+        </ul>
+    </section>
+</main>
+<script src="./app.js"></script>
+</body>
+</html>

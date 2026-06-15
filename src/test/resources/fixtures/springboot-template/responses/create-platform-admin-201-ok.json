@@ -1,0 +1,12 @@
+{
+  "username": "platform.owner",
+  "email": "platform.owner@bilimy.com",
+  "fullName": "Platform Owner",
+  "role": "PLATFORM_ADMIN",
+  "status": "ACTIVE",
+  "permissions": [
+    "PLATFORM_USERS_READ",
+    "PLATFORM_USERS_WRITE",
+    "SERVICES_DEPLOY"
+  ]
+}
