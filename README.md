@@ -83,7 +83,7 @@ The template includes a platform-level feature around `PlatformAdmin`.
 ## Environment variables
 
 - `SPRING_DATA_MONGODB_URI`
-  Example: `mongodb://admin:DigitalOcean2026Debesis@mongodb:27017/platform_template?authSource=admin`
+  Example: `mongodb://admin:templatePassword@mongodb:27017/platform_template?authSource=admin`
 - `SPRING_DATA_MONGODB_DATABASE`
   Example: `platform_template`
 - `MONGO_INITDB_ROOT_USERNAME`
@@ -100,7 +100,7 @@ If you want MongoDB only:
 1. Start only MongoDB:
    - `docker compose up mongodb`
 2. Run the service locally:
-   - `SPRING_DATA_MONGODB_URI='mongodb://admin:DigitalOcean2026Debesis@localhost:27017/platform_template?authSource=admin' ./mvnw spring-boot:run`
+   - `./mvnw spring-boot:run`
 
 ## Example seed data for MongoDB
 
@@ -135,7 +135,7 @@ db.platform_admin.insertOne({
 - Port `8080` already in use
   - Fix: change the host side mapping in `docker-compose.yml`, for example `8081:8080`.
 - Port `27017` already in use
-  - Fix: change the MongoDB host port mapping, for example `27018:27017`, and update your local URI if needed.
+  - Fix: change the MongoDB host port mapping, for example `27019:27017`, and update `MONGODB_PORT` if needed.
 - Mongo authentication failed
   - Cause: credentials in `SPRING_DATA_MONGODB_URI` do not match the Mongo container environment variables.
   - Fix: keep `MONGO_INITDB_ROOT_USERNAME`, `MONGO_INITDB_ROOT_PASSWORD`, and `SPRING_DATA_MONGODB_URI` aligned.
