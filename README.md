@@ -82,16 +82,18 @@ The template includes a platform-level feature around `PlatformAdmin`.
 
 ## Environment variables
 
-- `SPRING_DATA_MONGODB_URI`
-  Example: `mongodb://admin:templatePassword@mongodb:27017/platform_template?authSource=admin`
-- `SPRING_DATA_MONGODB_DATABASE`
-  Example: `platform_template`
-- `MONGO_INITDB_ROOT_USERNAME`
+- `MONGODB_USERNAME`
   Default: `admin`
-- `MONGO_INITDB_ROOT_PASSWORD`
-  Default: `DigitalOcean2026Debesis`
-- `MONGO_INITDB_DATABASE`
+- `MONGODB_PASSWORD`
+  Default: `templatePassword`
+- `MONGODB_HOST`
+  Use `mongodb` when the app runs in Compose on the same network.
+- `MONGODB_PORT`
+  Default: `27017`
+- `MONGODB_DATABASE`
   Default: `platform_template`
+- `MONGODB_AUTH_DATABASE`
+  Default: `admin`
 
 ## Running MongoDB separately
 
@@ -131,14 +133,14 @@ db.platform_admin.insertOne({
   - Fix: run Docker with `sudo` or add your user to the group with `sudo usermod -aG docker $USER`.
 - Hostname resolution failure for `mongodb`
   - Cause: the service is running outside Compose and cannot resolve the Compose service name.
-  - Fix: use `localhost` in `SPRING_DATA_MONGODB_URI` when running the app directly on your machine.
+  - Fix: use `localhost` in `MONGODB_HOST` when running the app directly on your machine and MongoDB is exposed on the host.
 - Port `8080` already in use
   - Fix: change the host side mapping in `docker-compose.yml`, for example `8081:8080`.
 - Port `27017` already in use
   - Fix: change the MongoDB host port mapping, for example `27019:27017`, and update `MONGODB_PORT` if needed.
 - Mongo authentication failed
-  - Cause: credentials in `SPRING_DATA_MONGODB_URI` do not match the Mongo container environment variables.
-  - Fix: keep `MONGO_INITDB_ROOT_USERNAME`, `MONGO_INITDB_ROOT_PASSWORD`, and `SPRING_DATA_MONGODB_URI` aligned.
+  - Cause: the `MONGODB_*` application variables do not match the Mongo container environment variables.
+  - Fix: keep `MONGODB_USERNAME`, `MONGODB_PASSWORD`, `MONGODB_DATABASE`, and `MONGODB_AUTH_DATABASE` aligned across the app and MongoDB.
 - Testcontainers cannot start MongoDB
   - Cause: Docker is not available to the current user.
   - Fix: ensure Docker is running and that `docker ps` works before `./mvnw test`.

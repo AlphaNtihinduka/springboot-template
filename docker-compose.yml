@@ -1,8 +1,4 @@
 services:
-  app:
-    build: .
-    env_file:
-      - .env
   mongodb:
     image: mongo:7.0
     healthcheck:
@@ -29,6 +25,8 @@ services:
   springboot-template:
     build: .
     image: springboot-template:latest
+    env_file:
+      - .env
     #⚠️ 4. restart: always is OK, but consider unless-stopped
     #
     #Better:
@@ -41,12 +39,7 @@ services:
     ports:
       - "8081:8080"
     environment:
-      MONGODB_USERNAME: ${MONGODB_USERNAME:-admin}
-      MONGODB_PASSWORD: ${MONGODB_PASSWORD:-templatePassword}
       MONGODB_HOST: mongodb
-      MONGODB_PORT: 27017
-      MONGODB_DATABASE: ${MONGODB_DATABASE:-platform_template}
-      MONGODB_AUTH_DATABASE: admin
     # ⚠️ 5. Missing dependency safety for MongoDB startup
     #depends_on:
     #  - mongodb
