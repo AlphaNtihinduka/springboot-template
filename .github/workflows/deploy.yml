@@ -100,7 +100,7 @@ jobs:
   # JOB 2 — CD: pull new image on VPS, restart container
   # ══════════════════════════════════════════════════════
   deploy:
-    name: Deploy to DigitalOcean
+    name: Deploy to Hostinger
     runs-on: ubuntu-latest
     needs: build
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -115,7 +115,7 @@ jobs:
           script: |
             set -e
 
-            cd /opt/course-domain
+            cd /opt/springboot-template
 
             docker compose pull
             docker compose up -d

@@ -34,8 +34,8 @@ public abstract class BaseIntegrationTest {
         mongoDBContainer.start();
 
         String mongoUri = mongoDBContainer.getReplicaSetUrl("platform_template_test");
-        registry.add("spring.data.mongodb.uri", () -> mongoUri);
-        registry.add("spring.data.mongodb.database", () -> "platform_template_test");
+        registry.add("spring.mongodb.uri", () -> mongoUri);
+        registry.add("spring.mongodb.database", () -> "platform_template_test");
     }
 
     @Autowired
