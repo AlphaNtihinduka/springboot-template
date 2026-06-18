@@ -84,8 +84,8 @@ jobs:
 
       # 5. Build the Docker image using your Dockerfile
       #    and push it to Docker Hub with two tags:
-      #    - debesis/course-domain:latest     (always newest)
-      #    - debesis/course-domain:a1b2c3...  (this specific commit)
+      #    - SpringBoot template    (always newest)
+      #    - Springboot template:a1b2c3...  (this specific commit)
       - name: Build & Push Docker image
         if: github.ref == 'refs/heads/main'
         uses: docker/build-push-action@v5
@@ -93,8 +93,8 @@ jobs:
           context: .          # use Dockerfile in project root
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/course-domain:latest
-            ${{ secrets.DOCKER_USERNAME }}/course-domain:${{ github.sha }}
+            ${{ secrets.DOCKER_USERNAME }}/springboot-template:latest
+            ${{ secrets.DOCKER_USERNAME }}/springboot-template:${{ github.sha }}
 
   # ══════════════════════════════════════════════════════
   # JOB 2 — CD: pull new image on VPS, restart container
@@ -122,4 +122,4 @@ jobs:
             docker image prune -f
 
             docker compose ps
-            echo "✅ Deployed $(docker ps --format '{{.Image}}' --filter name=course-domain)"
+            echo "✅ Deployed $(docker ps --format '{{.Image}}' --filter name=springboot-template)"
