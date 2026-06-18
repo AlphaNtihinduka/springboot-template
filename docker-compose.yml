@@ -1,68 +1,32 @@
 services:
   mongodb:
     image: mongo:7.0
-    healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.runCommand({ ping: 1 })", "--quiet"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     restart: unless-stopped
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
-      MONGO_INITDB_DATABASE: ${MONGODB_DATABASE}
-    #(recommended)
-    #
-    #Only expose MongoDB internally:
-    #
-    #ports: []
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: templatePassword
+      MONGO_INITDB_DATABASE: platform_template
     ports: []
     volumes:
       - mongo_data:/data/db
     networks:
       - template-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.runCommand({ ping: 1 })", "--quiet"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   springboot-template:
     build: .
     image: springboot-template:latest
-    env_file:
-      - .env
-    #⚠️ 4. restart: always is OK, but consider unless-stopped
-    #
-    #Better:
-    #
-    #restart: unless-stopped
-    #Why?
-    #always restarts even after manual stop
-    #unless-stopped is safer for VPS management
     restart: unless-stopped
     ports:
-      - "8081:8080"
+      - "8081:8081"
     environment:
-      MONGODB_HOST: mongodb
-    # ⚠️ 5. Missing dependency safety for MongoDB startup
-    #depends_on:
-    #  - mongodb
-    #❌ Problem
-    #
-    #This does NOT guarantee MongoDB is ready — only started.
-    #
-    #Spring may start too early → connection failure.
-    #
-    #✅ Fix: add healthcheck
-    #mongodb:
-    #  image: mongo:7.0
-    #  healthcheck:
-    #    test: echo 'db.runCommand({ ping: 1 })' | mongosh localhost:27017/test --quiet
-    #    interval: 10s
-    #    timeout: 5s
-    #    retries: 5
-    #
-    #Then:
-    #
-    #depends_on:
-    #  mongodb:
-    #    condition: service_healthy
+      SERVER_PORT: 8081
+      SPRING_MONGODB_URI: mongodb://admin:templatePassword@mongodb:27017/platform_template?authSource=admin&directConnection=true&serverSelectionTimeoutMS=7000
+      SPRING_MONGODB_DATABASE: platform_template
     depends_on:
       mongodb:
         condition: service_healthy
