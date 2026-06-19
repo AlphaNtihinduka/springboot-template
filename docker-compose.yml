@@ -18,8 +18,7 @@ services:
       retries: 5
 
   springboot-template:
-    build: .
-    image: springboot-template:latest
+    image: alphadevug/springboot-template:latest
     restart: unless-stopped
     ports:
       - "8081:8081"
